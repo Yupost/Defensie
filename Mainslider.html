@@ -1,0 +1,116 @@
+<html>
+
+<head>
+  <title>Slider Defensie</title>
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Slider functies voor kaart of beelden">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="author" content="Frank van der Wal & Ryan Geuzinge">
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui' />
+
+  <!-- Leaflet inladen lokaal-->
+  <!--
+    <link rel="stylesheet" href="assets/leaflet.css"/>
+    <script src="assets/leaflet.js"></script>
+-->
+  <!-- leaflet inladen online -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
+
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+
+  <!-- Inladen van slider script-->
+  <script src="leaflet-side-by-side.js"></script>
+  <!--geoJSON van de gemeente grenzen-->
+  <script src="gemeentes.js"></script>
+
+
+  <!-- Inladen ESRI lokaal -->
+  <!--        <script src="plugins/esri/dist/esri-leaflet.js"></script>-->
+  <!-- Inladen ESRI online -->
+  <script src="https://unpkg.com/esri-leaflet@2.3.3/dist/esri-leaflet.js" integrity="sha512-cMQ5e58BDuu1pr9BQ/eGRn6HaR6Olh0ofcHFWe5XesdCITVuSBiBZZbhCijBe5ya238f/zMMRYIMIIg1jxv4sQ==" crossorigin=""></script>
+
+  <!-- styling of the body and map-->
+  <style>
+    #body {
+      margin: 0;
+      padding: 0;
+      color: dimgrey;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #map {
+      position: relative;
+      margin: 1%;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      height: 100%;
+      border-radius: 10px 10px 10px 10px;
+      border: 1px solid darkgrey;
+    }
+
+    #header {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: small;
+      font-size: 24px;
+      font-weight: bold;
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    #column {
+      width: 50%;
+    }
+
+    #borderbottom {
+      border-bottom: 1px solid grey;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="map"></div>
+
+  <!-- leaflet -->
+  <script>
+    var map = L.map('map').setView([52.3951221, 5.9080867], 12);
+
+    //DE 2 BASEMAPS WAAR DE SLIDER OVERHEEN GAAT
+    var myLayer1 = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    var myLayer2 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    }).addTo(map);
+
+    L.control.sideBySide(myLayer1, myLayer2).addTo(map);
+
+
+
+
+    // GEMEENTE GRENZEN LAAG
+    var layerGroup = L.geoJSON(gemeentes, {
+      onEachFeature: function(feature, layer) {
+        layer.bindPopup('<h3>' + feature.properties.name + '</h3>');
+      }
+    }).addTo(map);
+    //MARKER Tonnetkazerne
+    var marker = L.marker([52.3952268, 5.9060268]).addTo(map);
+    marker.bindPopup("<h1>Tonnetkazerne</h1>").openPopup(map);
+  </script>
+
+</body>
+
+
+
+
+
+
+</html>
